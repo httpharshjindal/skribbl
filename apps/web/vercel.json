@@ -1,0 +1,12 @@
+{
+    "buildCommand": "npm run build",
+    "framework": "nextjs",
+    "outputDirectory": "out",
+    "rewrites": [
+      {
+        "source": "/(.*)",
+        "destination": "/$1"
+      }
+    ]
+  }
+  

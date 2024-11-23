@@ -1,0 +1,11 @@
+{
+    "projects": {
+      "web": {
+        "root": "apps/web"
+      },
+      "api": {
+        "root": "apps/api"
+      }
+    }
+  }
+  
