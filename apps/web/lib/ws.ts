@@ -4,7 +4,7 @@ export default function createWebSocket() {
   // Ensure we don't create a new socket if one already exists and is open
   if (!socket || socket.readyState === WebSocket.CLOSED || socket.readyState === WebSocket.CLOSING) {
     // Make sure the WebSocket URL is defined in the environment variables
-    const wsUrl = process.env.WS_URL;
+    const wsUrl = process.env.WS_URL || "wss://localhost:8080";
     if (!wsUrl) {
       throw new Error("WebSocket URL (WS_URL) is not defined.");
     }
