@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import createWebSocket from "../lib/ws";
 import { BackgroundBeams } from "./ui/background-beams";
 import UserProfile from "./ui/userProfile";
-
+import React from "react";
 export let gameId = "";
 export let clientId = "";
 export default () => {

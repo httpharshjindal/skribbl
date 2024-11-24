@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { clientId } from "./HomePage";
 import UserProfile from "./ui/userProfile";
-
+import React from "react";
 interface GameClient {
   nickName: string;
   clientId: string;

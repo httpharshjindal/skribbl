@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { clientId, gameId } from "./HomePage";
 import createWebSocket from "../lib/ws";
-
+import React from "react";
 export default ({
   message,
   user,
