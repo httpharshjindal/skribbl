@@ -2,17 +2,17 @@ import express, { json } from "express";
 import { v4 as uuidv4 } from "uuid";
 import { hash, compare } from "bcrypt";
 import cors from "cors";
-
+const PORT = process.env.PORT || 3000;
 import { WebSocket, WebSocketServer } from "ws";
 const app = express();
 app.use(express.json());
 app.use(
   cors({
     credentials: true,
-    origin: "http://localhost:5173",
+    origin: process.env.FRONTEND_URL || "http://localhost:5173",
   })
 );
-const httpServer = app.listen(8080, () => {
+const httpServer = app.listen(PORT, () => {
   console.log(`server listining on port 8080`);
 });
 const wss = new WebSocketServer({ server: httpServer });

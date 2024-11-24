@@ -1,16 +1,17 @@
 {
-  "pipeline": {
-    "build": [
-      "apps/web",
-      "apps/api"
-    ],
-    "dev": [
-      "apps/web",
-      "apps/api"
-    ],
-    "lint": [
-      "apps/web",
-      "apps/api"
-    ]
+  "$schema": "https://turbo.build/schema.json",
+  "tasks": {
+    "build": {
+      "dependsOn": ["^build"],
+      "outputs": ["dist/**", ".next/**", "!.next/cache/**"]
+    },
+    "test": {
+      "outputs": ["coverage/**"],
+      "dependsOn": ["build"]
+    },
+    "dev": {
+      "cache": false,
+      "persistent": true
+    }
   }
 }
