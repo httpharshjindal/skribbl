@@ -4,11 +4,11 @@ import { useEffect, useState } from "react";
 import Canvas from "../../components/canvas";
 import Chat from "../../components/chat";
 import Players from "../../components/players";
+import Timer from "../../components/Timer";
 import { clientId, gameId } from "../../components/HomePage";
 import createWebSocket from "../../lib/ws";
 import { BackgroundBeams } from "../../components/ui/background-beams";
 import { useRouter } from "next/navigation";
-import Timer from "../../components/Timer";
 interface GameClient {
   nickName: string;
   clientId: string;

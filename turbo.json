@@ -3,7 +3,8 @@
   "tasks": {
     "build": {
       "dependsOn": ["^build"],
-      "outputs": ["dist/**", ".next/**", "!.next/cache/**"]
+      "outputs": ["dist/**", ".next/**", "!.next/cache/**"],
+      "env": ["WS_URL"]
     },
     "test": {
       "outputs": ["coverage/**"],
@@ -13,5 +14,6 @@
       "cache": false,
       "persistent": true
     }
-  }
+  },
+  "globalDependencies": ["WS_URL"]
 }

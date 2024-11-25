@@ -12,7 +12,7 @@ interface GameClient {
   guessed?: boolean;
 }
 
-export default function ClientList({
+const Players = ({
   clients,
   turnCount,
   selectedPlayer,
@@ -20,7 +20,7 @@ export default function ClientList({
   clients: any; // Explicit type for clients
   turnCount: any;
   selectedPlayer: any;
-}) {
+}) =>{
   const [players, setPlayers] = useState<GameClient[]>([]);
 
   useEffect(() => {
@@ -59,3 +59,5 @@ export default function ClientList({
     </div>
   );
 }
+
+export default Players

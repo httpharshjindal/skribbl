@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import React from "react";
-export default ({
+const Timer = ({
   turnCount,
   gameStarted,
 }: {
@@ -26,3 +26,5 @@ export default ({
     </div>
   );
 };
+
+export default Timer

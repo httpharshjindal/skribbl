@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { clientId, gameId } from "./HomePage";
 import createWebSocket from "../lib/ws";
 import React from "react";
-export default ({
+const Chat = ({
   message,
   user,
   allowCursor,
@@ -94,3 +94,5 @@ export default ({
     </div>
   );
 };
+
+export default Chat
