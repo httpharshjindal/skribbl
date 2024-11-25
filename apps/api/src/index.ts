@@ -19,7 +19,7 @@ app.get("/", (req, res) => {
   });
 });
 const httpServer = app.listen(PORT, () => {
-  console.log(`server listining on port 8080`);
+  console.log(`server listining on port${PORT}`);
 });
 const wss = new WebSocketServer({ server: httpServer });
 
