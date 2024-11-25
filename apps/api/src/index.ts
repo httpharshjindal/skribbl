@@ -12,6 +12,12 @@ app.use(
     origin: process.env.FRONTEND_URL || "http://localhost:5173",
   })
 );
+
+app.get("/", (req, res) => {
+  res.json({
+    message: "connected successfully",
+  });
+});
 const httpServer = app.listen(PORT, () => {
   console.log(`server listining on port 8080`);
 });
