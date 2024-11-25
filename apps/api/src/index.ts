@@ -538,6 +538,4 @@ function endGame(gameId: string) {
   console.log(`Game with ID ${gameId} has been removed.`);
 }
 
-setInterval(() => {
-  broadcast();
-}, 3000);
+
