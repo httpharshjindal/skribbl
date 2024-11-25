@@ -1,6 +1,6 @@
 import express, { json } from "express";
 import { v4 as uuidv4 } from "uuid";
-import { hash, compare } from "bcrypt";
+import { hash, compare } from "bcryptjs";
 import cors from "cors";
 const PORT = process.env.PORT || 3000;
 import { WebSocket, WebSocketServer } from "ws";
