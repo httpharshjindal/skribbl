@@ -1,81 +1,113 @@
-# Turborepo starter
+# Skribbllle.io Clone - Multiplayer Drawing & Guessing Game
 
-This is an official starter Turborepo.
+Welcome to **Skribbllle.io**, a fun multiplayer drawing and guessing game where friends can play together, compete, and have a blast! This project is a clone of the popular game **Skribbl.io**, with real-time interactions, colorful drawings, and a scoreboard that updates instantly. 🖌️🎨
 
-## Using this example
+## How It Works
 
-Run the following command:
+- **Players:** All players take turns drawing and guessing.
+- **Drawing:** The selected player is given a random word and has 60 seconds to draw it on the canvas.
+  - **Canvas Tools:** Multiple colors are available, and there's a **clear button** to erase the drawing.
+- **Guessing:** The other players guess the word by typing it into the message section.
+  - **Points:** A correct guess earns **100 points**.
+- **Real-Time Scoring:** The scoreboard is updated in real-time for all players to see.
+- **Game End:** After each round, players are ranked based on their score, and the game ends with a winner crowned! 🏆
 
-```sh
-npx create-turbo@latest
-```
+![2](https://github.com/user-attachments/assets/0c97073f-0aca-4b63-a9f1-fe5871e2650a)
+![1](https://github.com/user-attachments/assets/dedb2f1c-0363-4ad9-86ce-6f98a2160d29)
+![4](https://github.com/user-attachments/assets/eb28c156-e89c-4388-96b5-6e5298c56090)
 
-## What's inside?
 
-This Turborepo includes the following packages/apps:
+## Features
 
-### Apps and Packages
+- **Multiplayer gameplay** for friends to join and play together.
+- **Real-time drawing and guessing** with immediate feedback.
+- **60-second rounds** to keep the action fast and fun.
+- **Live leaderboard** that updates after every round.
+- **Colorful drawing canvas** with clear and customizable drawing tools.
 
-- `docs`: a [Next.js](https://nextjs.org/) app
-- `web`: another [Next.js](https://nextjs.org/) app
-- `@repo/ui`: a stub React component library shared by both `web` and `docs` applications
-- `@repo/eslint-config`: `eslint` configurations (includes `eslint-config-next` and `eslint-config-prettier`)
-- `@repo/typescript-config`: `tsconfig.json`s used throughout the monorepo
+## Tech Stack
 
-Each package/app is 100% [TypeScript](https://www.typescriptlang.org/).
+- **Backend:**
+  - **Node.js** - JavaScript runtime for building the server.
+  - **Express.js** - Web framework for routing and handling HTTP requests.
+  - **WebSocket** - For real-time, bidirectional communication between the server and clients.
+  
+- **Frontend:**
+  - **Next.js** - React-based framework for building the user interface and handling routing.
+  - **React.js** - For building interactive UI components.
+  - **Tailwind CSS** - For styling and making the design responsive and modern.
+  - **Aceternity UI** - A UI library to enhance user experience.
 
-### Utilities
+- **Deployment:**
+  - **Vercel** - For hosting and deploying the app with high performance.
 
-This Turborepo has some additional tools already setup for you:
+## Getting Started
 
-- [TypeScript](https://www.typescriptlang.org/) for static type checking
-- [ESLint](https://eslint.org/) for code linting
-- [Prettier](https://prettier.io) for code formatting
+To run this project locally, follow the steps below:
 
-### Build
+### Prerequisites
 
-To build all apps and packages, run the following command:
+1. **Node.js**: Make sure you have **Node.js** installed. If not, download it from [here](https://nodejs.org/).
+2. **Git**: Install **Git** to clone the repository. Download it from [here](https://git-scm.com/).
 
-```
-cd my-turborepo
-pnpm build
-```
+### Installation
 
-### Develop
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/your-username/skribbllle-io.git
+   ```
 
-To develop all apps and packages, run the following command:
+2. Install dependencies:
+   ```bash
+   cd skribbllle-io
+   npm install
+   ```
 
-```
-cd my-turborepo
-pnpm dev
-```
+3. Start the development server:
+   ```bash
+   npm run dev
+   ```
 
-### Remote Caching
+4. Open your browser and go to `http://localhost:3000` to play the game!
+  
+5. Create an `.env` file in the apps/web folder of your project and add the following:
 
-Turborepo can use a technique known as [Remote Caching](https://turbo.build/repo/docs/core-concepts/remote-caching) to share cache artifacts across machines, enabling you to share build caches with your team and CI/CD pipelines.
+   ```
+   WS_URL=ws://your-websocket-server-url
+   ```
 
-By default, Turborepo will cache locally. To enable Remote Caching you will need an account with Vercel. If you don't have an account you can [create one](https://vercel.com/signup), then enter the following commands:
+   **Note:** Replace `your-websocket-server-url` with the actual WebSocket server URL you're using for your backend.
 
-```
-cd my-turborepo
-npx turbo login
-```
+## Contributing
 
-This will authenticate the Turborepo CLI with your [Vercel account](https://vercel.com/docs/concepts/personal-accounts/overview).
+Feel free to fork this project, report bugs, or create pull requests! Contributions are always welcome.  
 
-Next, you can link your Turborepo to your Remote Cache by running the following command from the root of your Turborepo:
+### How to Contribute:
 
-```
-npx turbo link
-```
+1. Fork the repository.
+2. Create a new branch (`git checkout -b feature-name`).
+3. Commit your changes (`git commit -am 'Add new feature'`).
+4. Push to the branch (`git push origin feature-name`).
+5. Create a new pull request.
 
-## Useful Links
+## License
 
-Learn more about the power of Turborepo:
+This project is open-source and available under the [MIT License](LICENSE).
 
-- [Tasks](https://turbo.build/repo/docs/core-concepts/monorepos/running-tasks)
-- [Caching](https://turbo.build/repo/docs/core-concepts/caching)
-- [Remote Caching](https://turbo.build/repo/docs/core-concepts/remote-caching)
-- [Filtering](https://turbo.build/repo/docs/core-concepts/monorepos/filtering)
-- [Configuration Options](https://turbo.build/repo/docs/reference/configuration)
-- [CLI Usage](https://turbo.build/repo/docs/reference/command-line-reference)
+## Acknowledgements
+
+A big thank you to **Harkirat Singh** for his valuable guidance and inspiration for this project! 🙌
+
+## Links
+
+- [GitHub Repository](https://github.com/your-username/skribbllle-io)
+- [Live Demo (Vercel)](https://your-app-name.vercel.app)
+
+---
+
+### Enjoy playing and let your creativity flow! ✏️
+
+
+
+
+
