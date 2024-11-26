@@ -9,16 +9,13 @@ const Chat = ({
   user,
   allowCursor,
   selectedPlayer,
-  clients,
 }: {
   message: any;
   user: any;
   allowCursor: any;
   selectedPlayer: any;
-  clients: any;
 }) => {
   const [userMessage, setUserMessage] = useState("");
-  console.log(message, user);
   const [socket, setSocket] = useState<WebSocket | null>(null);
   useEffect(() => {
     const ws = createWebSocket(); // Provide your WebSocket server URL
@@ -47,7 +44,6 @@ const Chat = ({
       console.warn("WebSocket not initialized yet");
     }
   };
-  console.log(user);
   return (
     <div className={`w-1/5 h-full bg-zinc-200 p-2`}>
       <div className="h-[80vh] w-full overflow-y-scroll scrollbar-none">

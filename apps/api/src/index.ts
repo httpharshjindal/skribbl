@@ -539,3 +539,6 @@ function endGame(gameId: string) {
 }
 
 
+setInterval(() => {
+  broadcast()
+}, 3000);

@@ -35,13 +35,21 @@ export default function Game() {
   const [isLoading, setIsLoading] = useState(true);
   // const [currentTurn, setCurrentTurn] = useState("");
   useEffect(() => {
+    if (!gameId) {
+      router.push("/");
+    } else {
+      setIsLoading(false);
+    }
+  }, [router]);
+
+  useEffect(() => {
     const ws = createWebSocket();
     setSocket(ws);
     ws.onmessage = (event: MessageEvent) => {
+      const data = JSON.parse(event.data);
+      console.log("Received data:", data);
       try {
-        const data = JSON.parse(event.data);
-        console.log("Received data:", data);
-        if (data.event === "state") {
+        if (data.event == "state") {
           setState(data.game);
           setClients(Object.values(data.game.clients));
           setMessage(data.game.state.messages);
@@ -106,15 +114,8 @@ export default function Game() {
       setPopUp(false);
     }, 5000);
   }
-
-  useEffect(() => {
-    if (!gameId) {
-      router.push("/");
-    } else {
-      setIsLoading(false);
-    }
-  }, [router]);
-
+  console.log(clientId);
+  console.log(hostId);
   return (
     <div className="w-full h-screen px-5 py-5 flex justify-start items-center flex-col gap-2 relative">
       <div>
@@ -133,7 +134,6 @@ export default function Game() {
           clearCanvasEvent={clearCanvasEvent}
         />
         <Chat
-          clients={clients}
           message={message}
           user={user}
           allowCursor={allowCursor}
@@ -157,7 +157,7 @@ export default function Game() {
               )}
             </div>
 
-            {hostId == clientId ? (
+            {hostId && hostId == clientId ? (
               <div className="flex justify-center items-center flex-col z-50 ">
                 <h1 className="font-bold text-3xl text-white">
                   Start The Game
