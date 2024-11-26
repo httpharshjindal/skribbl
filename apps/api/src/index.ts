@@ -1,9 +1,10 @@
-import express, { json } from "express";
+import express from "express";
 import { v4 as uuidv4 } from "uuid";
 import { hash, compare } from "bcryptjs";
 import cors from "cors";
 const PORT = process.env.PORT || 3000;
 import { WebSocket, WebSocketServer } from "ws";
+import { words } from "./words";
 const app = express();
 app.use(express.json());
 app.use(
@@ -18,6 +19,7 @@ app.get("/", (req, res) => {
     message: "connected successfully",
   });
 });
+
 const httpServer = app.listen(PORT, () => {
   console.log(`server listining on port${PORT}`);
 });
@@ -58,108 +60,13 @@ interface Game {
   isGameStarted: boolean;
   selectedPlayer: string;
   selectedWord: string;
-  wordLength:number
+  wordLength: number;
+  broadcastInterval?: NodeJS.Timeout;
 }
 
-const words = [
-  "cat",
-  "rat",
-  "car",
-  "pen",
-  "caterpillar",
-  "rocket",
-  "alligator",
-  "pizza",
-  "shirt",
-  "kite",
-  "eyes",
-  "chair",
-  "cup",
-  "jacket",
-  "hippo",
-  "bird",
-  "monster",
-  "bracelet",
-  "coat",
-  "balloon",
-  "dinosaur",
-  "head",
-  "book",
-  "mouse",
-  "smile",
-  "bridge",
-  "blocks",
-  "milk",
-  "eye",
-  "oval",
-  "snowflake",
-  "broom",
-  "cheese",
-  "lion",
-  "lips",
-  "beach",
-  "cloud",
-  "bus",
-  "elephant",
-  "sunglasses",
-  "lemon",
-  "star",
-  "spoon",
-  "boat",
-  "turtle",
-  "drum",
-  "doll",
-  "ant",
-  "motorcycle",
-  "bike",
-  "pencil",
-  "bunk bed",
-  "moon",
-  "inchworm",
-  "slide",
-  "hat",
-  "tail",
-  "helicopter",
-  "square",
-  "Mickey Mouse",
-  "octopus",
-  "door",
-  "table",
-  "egg",
-  "bell",
-  "nose",
-  "spider",
-  "horse",
-  "finger",
-  "glasses",
-  "jar",
-  "girl",
-  "ear",
-  "lizard",
-  "flower",
-  "snowman",
-  "baby",
-  "bread",
-  "blanket",
-  "apple",
-  "bench",
-  "skateboard",
-  "pig",
-  "ice cream cone",
-  "frog",
-  "feet",
-  "lollipop",
-  "heart",
-  "ears",
-  "bed",
-  "carrot",
-  "person",
-  "boy",
-];
 const clients: Record<string, client> = {};
 const games: Record<string, Game> = {};
 
-let broadcastInterval;
 
 wss.on("connection", function connection(socket) {
   socket.on("error", console.error);
@@ -185,7 +92,7 @@ wss.on("connection", function connection(socket) {
             isGameStarted: false,
             selectedPlayer: "",
             selectedWord: "",
-            wordLength:0,
+            wordLength: 0,
             state: {
               messages: [],
               drawing: [],
@@ -260,6 +167,9 @@ wss.on("connection", function connection(socket) {
 
           console.log("Starting game for gameId:", gameId);
           games[gameId].isGameStarted = true;
+          broadcastInterval: setInterval(() => {
+            broadcast();
+          }, 3000);
           startTurnCycle(gameId);
           handleTurn(gameId);
           broadcast();
@@ -401,10 +311,10 @@ const sendRandomWordToPlayer = async (
   currentClient: string
 ) => {
   const randomWord = words[Math.floor(Math.random() * words.length)];
-  games[gameId].wordLength = randomWord.length
+  games[gameId].wordLength = randomWord.length;
   try {
     games[gameId].selectedWord = await hash(randomWord, 10);
-    games[gameId].wordLength = randomWord.length
+    games[gameId].wordLength = randomWord.length;
   } catch (e) {
     console.log(e);
   }
@@ -412,7 +322,7 @@ const sendRandomWordToPlayer = async (
     JSON.stringify({
       event: "your-turn",
       word: randomWord,
-      wordLength:games[gameId].wordLength
+      wordLength: games[gameId].wordLength,
     })
   );
   games[gameId].clients[currentClient].guessed = true;
@@ -431,7 +341,7 @@ const notifyOtherPlayers = ({
         JSON.stringify({
           event: "turn-notification",
           user: exceptPlayerId,
-          wordLength:games[gameId].wordLength
+          wordLength: games[gameId].wordLength,
         })
       );
     }
@@ -523,6 +433,9 @@ function endGame(gameId: string) {
     return;
   }
 
+  if (games[gameId].broadcastInterval) {
+    clearInterval(games[gameId].broadcastInterval);
+  }
   if (games[gameId].clients) {
     for (const c of Object.keys(games[gameId].clients)) {
       const clientConnection = clients[c]?.connection;
@@ -543,6 +456,3 @@ function endGame(gameId: string) {
   delete games[gameId];
   console.log(`Game with ID ${gameId} has been removed.`);
 }
-setInterval(() => {
-  broadcast()
-}, 3000);
