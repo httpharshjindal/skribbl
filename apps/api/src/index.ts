@@ -58,6 +58,7 @@ interface Game {
   isGameStarted: boolean;
   selectedPlayer: string;
   selectedWord: string;
+  wordLength:number
 }
 
 const words = [
@@ -184,6 +185,7 @@ wss.on("connection", function connection(socket) {
             isGameStarted: false,
             selectedPlayer: "",
             selectedWord: "",
+            wordLength:0,
             state: {
               messages: [],
               drawing: [],
@@ -399,8 +401,10 @@ const sendRandomWordToPlayer = async (
   currentClient: string
 ) => {
   const randomWord = words[Math.floor(Math.random() * words.length)];
+  games[gameId].wordLength = randomWord.length
   try {
     games[gameId].selectedWord = await hash(randomWord, 10);
+    games[gameId].wordLength = randomWord.length
   } catch (e) {
     console.log(e);
   }
@@ -408,6 +412,7 @@ const sendRandomWordToPlayer = async (
     JSON.stringify({
       event: "your-turn",
       word: randomWord,
+      wordLength:games[gameId].wordLength
     })
   );
   games[gameId].clients[currentClient].guessed = true;
@@ -426,6 +431,7 @@ const notifyOtherPlayers = ({
         JSON.stringify({
           event: "turn-notification",
           user: exceptPlayerId,
+          wordLength:games[gameId].wordLength
         })
       );
     }

@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import Canvas from "../../components/canvas";
 import Chat from "../../components/chat";
 import Players from "../../components/players";
-import Timer from "../../components/Timer";
 import { clientId, gameId } from "../../components/HomePage";
 import createWebSocket from "../../lib/ws";
 import { BackgroundBeams } from "../../components/ui/background-beams";
@@ -16,7 +15,6 @@ interface GameClient {
   score: string;
 }
 export default function Game() {
-  const [state, setState] = useState();
   const [clients, setClients] = useState<GameClient[]>([]);
   const [gameStarted, setGameStarted] = useState(false);
   const [message, setMessage] = useState([]);
@@ -30,15 +28,12 @@ export default function Game() {
   const [allowCursor, setAllowCursor] = useState(true);
   const [turnCount, setTurnCount] = useState(1);
   const [receivedDrawingData, setReceivedDrawingData] = useState([]);
-  const [clearCanvasEvent, setClearCanvasEvent] = useState(false);
   const router = useRouter();
-  const [isLoading, setIsLoading] = useState(true);
+  const [wordLenght, setWordLength] = useState(0);
   // const [currentTurn, setCurrentTurn] = useState("");
   useEffect(() => {
     if (!gameId) {
       router.push("/");
-    } else {
-      setIsLoading(false);
     }
   }, [router]);
 
@@ -50,12 +45,10 @@ export default function Game() {
       console.log("Received data:", data);
       try {
         if (data.event == "state") {
-          setState(data.game);
           setClients(Object.values(data.game.clients));
           setMessage(data.game.state.messages);
           setUser(data.game.clients[clientId]);
           setReceivedDrawingData(data.game.state.drawing);
-          setClearCanvasEvent(false);
           if (data.game.isGameStarted) {
             setGameStarted(true);
           }
@@ -74,7 +67,6 @@ export default function Game() {
         }
 
         if (data.event === "clear") {
-          setClearCanvasEvent(true);
           setReceivedDrawingData([]);
         }
 
@@ -83,6 +75,7 @@ export default function Game() {
           selectedPlayer?.clientId == clientId
         ) {
           setSelectedWord(data.word);
+          setWordLength(data.wordLength);
           setPopUp(true);
           setAllowCursor(false);
           setTurnCount((p) => p + 1);
@@ -90,6 +83,7 @@ export default function Game() {
         if (data.event == "turn-notification") {
           setPopUp(true);
           setAllowCursor(true);
+          setWordLength(data.wordLength);
           setTurnCount((p) => p + 1);
         }
         if (data.event == "game-over") {
@@ -114,14 +108,12 @@ export default function Game() {
       setPopUp(false);
     }, 5000);
   }
-  console.log(clientId);
-  console.log(hostId);
   return (
     <div className="w-full h-screen px-5 py-5 flex justify-start items-center flex-col gap-2 relative">
       <div>
         <BackgroundBeams />
       </div>
-      <Timer turnCount={turnCount} gameStarted={gameStarted} />
+
       <div className="flex w-full h-full gap-2 z-10 ">
         <Players
           selectedPlayer={selectedPlayer}
@@ -131,7 +123,10 @@ export default function Game() {
         <Canvas
           selectedPlayer={selectedPlayer?.clientId}
           receivedDrawingData={receivedDrawingData}
-          clearCanvasEvent={clearCanvasEvent}
+          turnCount={turnCount}
+          gameStarted={gameStarted}
+          wordLength={wordLenght}
+          selectedWord={slectedWord}
         />
         <Chat
           message={message}

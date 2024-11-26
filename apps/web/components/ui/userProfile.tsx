@@ -21,7 +21,6 @@ const UserProfile: React.FC<UserProfileProps> = ({
   onClickFun,
   color,
 }) => {
-  console.log(color);
   return (
     <div
       // Properly concatenate class names

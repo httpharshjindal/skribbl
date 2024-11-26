@@ -91,7 +91,7 @@ export default () => {
       <div className="w-80 bg-[#3760d121] rounded-md p-5 flex flex-col gap-2 absolute z-50">
         <div className="relative h-2">
           {popUp && (
-            <h1 className="text-red-600 text-center w-full absolute top-[-15] font-bold">
+            <h1 className="text-red-600 text-center w-full absolute -top-3 font-bold">
               {popUpMessage}
             </h1>
           )}

@@ -3,14 +3,22 @@
 import React, { useRef, useState, useEffect } from "react";
 import { clientId, gameId } from "./HomePage";
 import createWebSocket from "../lib/ws";
+import UnderlinedWord from "./UnderlinedWord";
+import Timer from "./Timer";
 const CanvasComponent = ({
   selectedPlayer,
   receivedDrawingData,
-  clearCanvasEvent,
+  wordLength,
+  turnCount,
+  gameStarted,
+  selectedWord,
 }: {
   selectedPlayer: any;
   receivedDrawingData: any;
-  clearCanvasEvent: any;
+  wordLength: any;
+  turnCount: any;
+  gameStarted: any;
+  selectedWord?: any;
 }) => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const [isDrawing, setIsDrawing] = useState(false);
@@ -210,6 +218,12 @@ const CanvasComponent = ({
             </button>
           </div>
         )}
+      </div>
+      <div className="absolute top-1 flex justify-center items-center z-50 select-none ">
+        <UnderlinedWord length={wordLength} selectedWord={selectedWord} />
+      </div>
+      <div className="absolute -top-5 flex justify-center items-center right-10 z-50 select-none">
+        <Timer turnCount={turnCount} gameStarted={gameStarted} />
       </div>
     </div>
   );

@@ -2,7 +2,7 @@ let socket: WebSocket | null = null;
 
 export default function createWebSocket() {
   if (!socket || socket.readyState === WebSocket.CLOSED || socket.readyState === WebSocket.CLOSING) {
-    const wsUrl = process.env.WS_URL || "wss://skribblll.onrender.com";
+    const wsUrl = process.env.WS_URL || "ws://localhost:3000";
     if (!wsUrl) {
       throw new Error("WebSocket URL (WS_URL) is not defined.");
     }
