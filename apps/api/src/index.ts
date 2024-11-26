@@ -391,9 +391,6 @@ const broadcast = () => {
       );
     }
   }
-  setTimeout(() => {
-    broadcast();
-  }, 3000);
 };
 
 const sendRandomWordToPlayer = async (
@@ -540,3 +537,6 @@ function endGame(gameId: string) {
   delete games[gameId];
   console.log(`Game with ID ${gameId} has been removed.`);
 }
+setInterval(() => {
+  broadcast()
+}, 3000);
