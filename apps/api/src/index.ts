@@ -114,7 +114,6 @@ wss.on("connection", function connection(socket) {
           );
           console.log(games), console.log(clients);
           broadcast();
-          setUPInterval(gameId)
         }
 
         //join
@@ -167,7 +166,9 @@ wss.on("connection", function connection(socket) {
 
           console.log("Starting game for gameId:", gameId);
           games[gameId].isGameStarted = true;
-
+          games[gameId].broadcastInterval = setInterval(() => {
+            broadcast();
+          }, 3000);
           startTurnCycle(gameId);
           handleTurn(gameId);
           broadcast();
@@ -453,10 +454,4 @@ function endGame(gameId: string) {
   games[gameId].currentTurn = 0;
   delete games[gameId];
   console.log(`Game with ID ${gameId} has been removed.`);
-}
-
-function setUPInterval(gameId: string) {
-  games[gameId].broadcastInterval = setInterval(() => {
-    broadcast();
-  }, 3000);
 }
