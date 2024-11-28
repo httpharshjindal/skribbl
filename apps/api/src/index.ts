@@ -2,7 +2,7 @@ import express from "express";
 import { v4 as uuidv4 } from "uuid";
 import { hash, compare } from "bcryptjs";
 import cors from "cors";
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 8080;
 import { WebSocket, WebSocketServer } from "ws";
 import { words } from "./words";
 const app = express();
@@ -67,7 +67,6 @@ interface Game {
 const clients: Record<string, client> = {};
 const games: Record<string, Game> = {};
 
-
 wss.on("connection", function connection(socket) {
   socket.on("error", console.error);
   console.log(wss.clients);
@@ -83,6 +82,12 @@ wss.on("connection", function connection(socket) {
           const color = message.color;
           const clientId = message.clientId;
           const nickName = message.nickName;
+          games[gameId].clients[clientId] = {
+            nickName: nickName,
+            clientId: clientId,
+            color: color,
+            score: 0,
+          };
           games[gameId] = {
             id: gameId,
             hostId: clientId,
@@ -98,23 +103,18 @@ wss.on("connection", function connection(socket) {
               drawing: [],
             },
           };
-
-          games[gameId].clients[clientId] = {
-            nickName: nickName,
-            clientId: clientId,
-            color: color,
-            score: 0,
-          };
           const con = clients[clientId].connection;
           con.send(
             JSON.stringify({
               event: "create",
               game: games[gameId],
               gameId: gameId,
+              hostId: clientId,
             })
           );
           console.log(games), console.log(clients);
           broadcast();
+          setUPInterval(gameId)
         }
 
         //join
@@ -167,9 +167,7 @@ wss.on("connection", function connection(socket) {
 
           console.log("Starting game for gameId:", gameId);
           games[gameId].isGameStarted = true;
-          broadcastInterval: setInterval(() => {
-            broadcast();
-          }, 3000);
+
           startTurnCycle(gameId);
           handleTurn(gameId);
           broadcast();
@@ -455,4 +453,10 @@ function endGame(gameId: string) {
   games[gameId].currentTurn = 0;
   delete games[gameId];
   console.log(`Game with ID ${gameId} has been removed.`);
+}
+
+function setUPInterval(gameId: string) {
+  games[gameId].broadcastInterval = setInterval(() => {
+    broadcast();
+  }, 3000);
 }
