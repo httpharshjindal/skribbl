@@ -2,7 +2,7 @@ import express from "express";
 import { v4 as uuidv4 } from "uuid";
 import { hash, compare } from "bcryptjs";
 import cors from "cors";
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 8080;
 import { WebSocket, WebSocketServer } from "ws";
 import { words } from "./words";
 const app = express();
@@ -66,7 +66,6 @@ interface Game {
 
 const clients: Record<string, client> = {};
 const games: Record<string, Game> = {};
-
 
 wss.on("connection", function connection(socket) {
   socket.on("error", console.error);
@@ -167,7 +166,7 @@ wss.on("connection", function connection(socket) {
 
           console.log("Starting game for gameId:", gameId);
           games[gameId].isGameStarted = true;
-          broadcastInterval: setInterval(() => {
+          games[gameId].broadcastInterval = setInterval(() => {
             broadcast();
           }, 3000);
           startTurnCycle(gameId);
