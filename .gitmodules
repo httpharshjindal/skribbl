@@ -1,3 +1,6 @@
 [submodule "apps/testt"]
 	path = apps/testt
 	url = https://github.com/httpharshjindal/test.git
+[submodule "apps/skribble-web"]
+	path = apps/skribble-web
+	url = https://github.com/httpharshjindal/test.git
