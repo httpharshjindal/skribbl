@@ -62,6 +62,7 @@ interface Game {
   selectedWord: string;
   wordLength: number;
   broadcastInterval?: NodeJS.Timeout;
+  turnInterval?: NodeJS.Timeout;
 }
 
 const clients: Record<string, client> = {};
@@ -169,7 +170,6 @@ wss.on("connection", function connection(socket) {
           games[gameId].broadcastInterval = setInterval(() => {
             broadcast();
           }, 3000);
-          startTurnCycle(gameId);
           handleTurn(gameId);
           broadcast();
         }
@@ -237,6 +237,7 @@ wss.on("connection", function connection(socket) {
                 (client) => client.guessed === true
               );
               if (allGuessed) {
+                clearInterval(games[gameId].turnInterval);
                 handleTurn(gameId);
               }
               clients[clientId].connection.send(
@@ -357,28 +358,35 @@ const notifyOtherPlayers = ({
   }
 };
 
-function handleTurn(gameId: string, turnInterval?: any) {
+function handleTurn(gameId: string) {
   if (games[gameId].currentTurn == Object.keys(games[gameId].clients).length) {
+    console.log("All players have taken their turn. Ending game.");
     setTimeout(() => {
       endGame(gameId);
     }, 5000);
+    clearInterval(games[gameId].turnInterval);
     return;
   }
+
   if (
     !games[gameId] ||
     !games[gameId].clients ||
     Object.keys(games[gameId].clients).length === 0
   ) {
     console.error("Invalid game or no players. Stopping turn cycle.");
-    clearInterval(turnInterval);
+    clearInterval(games[gameId].turnInterval);
     return;
   }
+
   const currentClient = Object.keys(games[gameId].clients)[
     games[gameId].currentTurn
   ];
   games[gameId].selectedPlayer = currentClient;
   if (!currentClient) {
-    clearInterval(turnInterval);
+    if (games[gameId].turnInterval) {
+      clearInterval(games[gameId].turnInterval);
+    }
+    handleTurn(gameId);
     console.error("Current client not found. Skipping turn.");
     return;
   }
@@ -389,11 +397,7 @@ function handleTurn(gameId: string, turnInterval?: any) {
     "for player:",
     currentClient
   );
-
-  // Notify the current player
   sendRandomWordToPlayer(clients[currentClient], gameId, currentClient);
-
-  // Notify other players
   notifyOtherPlayers({
     exceptPlayerId: currentClient,
     gameId: gameId,
@@ -405,36 +409,29 @@ function handleTurn(gameId: string, turnInterval?: any) {
   games[gameId].currentTurn = games[gameId].currentTurn + 1;
   games[gameId].state.messages = [];
   games[gameId].state.drawing = [];
-}
 
-function startTurnCycle(gameId: string) {
-  console.log("Starting turn cycle for game:", gameId);
-  const game = games[gameId];
-  if (
-    !games[gameId] ||
-    !games[gameId].clients ||
-    Object.keys(games[gameId].clients).length === 0
-  ) {
-    console.error("Invalid game or no players. Stopping turn cycle.");
-    return;
-  }
-  const turnInterval = setInterval(() => {
-    if (games[gameId] && games[gameId].clients) {
-      if (
-        games[gameId].currentTurn == Object.keys(games[gameId].clients).length
-      ) {
-        console.log("All players have taken their turn. Ending game.");
-        setTimeout(() => {
-          endGame(gameId);
-        }, 5000);
-        clearInterval(turnInterval);
-        return;
-      } else {
-        handleTurn(gameId, turnInterval);
-      }
-    }
+  games[gameId].turnInterval = setInterval(() => {
+    handleTurn(gameId);
   }, 60000);
 }
+
+// function startTurnCycle(gameId: string) {
+//   console.log("Starting turn cycle for game:", gameId);
+//   if (games[gameId] && games[gameId].clients) {
+//     if (
+//       games[gameId].currentTurn == Object.keys(games[gameId].clients).length
+//     ) {
+//       console.log("All players have taken their turn. Ending game.");
+//       setTimeout(() => {
+//         endGame(gameId);
+//       }, 5000);
+//       clearInterval(games[gameId].turnInterval);
+//       return;
+//     } else {
+
+//     }
+//   }
+// }
 
 function endGame(gameId: string) {
   if (!games[gameId]) {
