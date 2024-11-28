@@ -218,7 +218,6 @@ wss.on("connection", function connection(socket) {
         // guess
         if (message.event == "message") {
           try {
-            broadcast();
             const gameId = message.gameId;
             const clientId = message.clientId;
             if (!games[gameId]) {
@@ -297,7 +296,18 @@ const broadcast = () => {
       con.send(
         JSON.stringify({
           event: "state",
-          game: games[g],
+          game: {
+            id: games[g].id,
+            hostId: games[g].hostId,
+            clients: games[g].clients,
+            state: games[g].state,
+            currentTurn: games[g].currentTurn,
+            isGameOver: games[g].isGameOver,
+            isGameStarted: games[g].isGameStarted,
+            selectedPlayer: games[g].selectedPlayer,
+            selectedWord: games[g].selectedWord,
+            wordLength: games[g].wordLength,
+          },
         })
       );
     }
