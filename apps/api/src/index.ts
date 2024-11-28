@@ -2,7 +2,7 @@ import express from "express";
 import { v4 as uuidv4 } from "uuid";
 import { hash, compare } from "bcryptjs";
 import cors from "cors";
-const PORT = process.env.PORT || 8080;
+const PORT = process.env.PORT || 3000;
 import { WebSocket, WebSocketServer } from "ws";
 import { words } from "./words";
 const app = express();
@@ -10,7 +10,7 @@ app.use(express.json());
 app.use(
   cors({
     credentials: true,
-    origin: process.env.FRONTEND_URL || "http://localhost:5173",
+    origin: process.env.NEXT_PUBLIC_WS_URL || "http://localhost:5173",
   })
 );
 
@@ -67,6 +67,7 @@ interface Game {
 const clients: Record<string, client> = {};
 const games: Record<string, Game> = {};
 
+
 wss.on("connection", function connection(socket) {
   socket.on("error", console.error);
   console.log(wss.clients);
@@ -82,12 +83,6 @@ wss.on("connection", function connection(socket) {
           const color = message.color;
           const clientId = message.clientId;
           const nickName = message.nickName;
-          games[gameId].clients[clientId] = {
-            nickName: nickName,
-            clientId: clientId,
-            color: color,
-            score: 0,
-          };
           games[gameId] = {
             id: gameId,
             hostId: clientId,
@@ -103,13 +98,19 @@ wss.on("connection", function connection(socket) {
               drawing: [],
             },
           };
+
+          games[gameId].clients[clientId] = {
+            nickName: nickName,
+            clientId: clientId,
+            color: color,
+            score: 0,
+          };
           const con = clients[clientId].connection;
           con.send(
             JSON.stringify({
               event: "create",
               game: games[gameId],
               gameId: gameId,
-              hostId: clientId,
             })
           );
           console.log(games), console.log(clients);
@@ -166,7 +167,7 @@ wss.on("connection", function connection(socket) {
 
           console.log("Starting game for gameId:", gameId);
           games[gameId].isGameStarted = true;
-          games[gameId].broadcastInterval = setInterval(() => {
+          broadcastInterval: setInterval(() => {
             broadcast();
           }, 3000);
           startTurnCycle(gameId);
