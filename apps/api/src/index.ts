@@ -412,7 +412,7 @@ function handleTurn(gameId: string) {
 
   games[gameId].turnInterval = setInterval(() => {
     handleTurn(gameId);
-  }, 60000);
+  }, 120000);
 }
 
 // function startTurnCycle(gameId: string) {

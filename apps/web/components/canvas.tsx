@@ -219,12 +219,7 @@ const CanvasComponent = ({
           </div>
         )}
       </div>
-      <div className="absolute top-1 flex justify-center items-center z-50 select-none ">
-        <UnderlinedWord length={wordLength} selectedWord={selectedWord} />
-      </div>
-      <div className="absolute -top-5 flex justify-center items-center right-10 z-50 select-none">
-        <Timer turnCount={turnCount} gameStarted={gameStarted} />
-      </div>
+
     </div>
   );
 };
