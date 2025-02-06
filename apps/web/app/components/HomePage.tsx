@@ -12,7 +12,6 @@ const HomePage = () => {
   const [nickName, setNickName] = useState("");
   const [gameIdInput, setGameIdInput] = useState("");
   const [color, setColor] = useState("");
-  const [message, setMessage] = useState("");
   const [socket, setSocket] = useState<WebSocket | null>(null);
   const [popUp, setPopUp] = useState(true);
   const [popUpMessage, setPopUpMessage] = useState("");
