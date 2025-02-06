@@ -1,24 +1,21 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { clientId } from "./HomePage";
-import UserProfile from "./ui/userProfile";
 import React from "react";
+import UserProfile from "./ui/UserProfile";
 interface GameClient {
   nickName: string;
   clientId: string;
   color: string;
-  score: number; // Ensure score is a number
+  score: number;
   guessed?: boolean;
 }
 
 const Players = ({
   clients,
-  turnCount,
   selectedPlayer,
 }: {
   clients: any; // Explicit type for clients
-  turnCount: any;
   selectedPlayer: any;
 }) =>{
   const [players, setPlayers] = useState<GameClient[]>([]);

@@ -1,14 +1,5 @@
 import React from "react";
 
-const validColors = [
-  "red",
-  "blue",
-  "green",
-  "yellow",
-  "purple",
-  "pink",
-  "orange",
-]; // Define your allowed colors
 
 interface UserProfileProps {
   color?: string;

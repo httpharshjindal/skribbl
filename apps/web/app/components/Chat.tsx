@@ -1,9 +1,9 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { clientId, gameId } from "./HomePage";
 import createWebSocket from "../lib/ws";
 import React from "react";
+import { gameId } from "./HomePage";
 const Chat = ({
   message,
   user,

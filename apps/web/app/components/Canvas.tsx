@@ -1,24 +1,13 @@
 "use client";
-
 import React, { useRef, useState, useEffect } from "react";
-import { clientId, gameId } from "./HomePage";
 import createWebSocket from "../lib/ws";
-import UnderlinedWord from "./UnderlinedWord";
-import Timer from "./Timer";
-const CanvasComponent = ({
+import { clientId, gameId } from "./HomePage";
+const Canvas = ({
   selectedPlayer,
   receivedDrawingData,
-  wordLength,
-  turnCount,
-  gameStarted,
-  selectedWord,
 }: {
   selectedPlayer: any;
   receivedDrawingData: any;
-  wordLength: any;
-  turnCount: any;
-  gameStarted: any;
-  selectedWord?: any;
 }) => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const [isDrawing, setIsDrawing] = useState(false);
@@ -50,25 +39,14 @@ const CanvasComponent = ({
   }, []);
 
   useEffect(() => {
-    // Merge new drawing data with the existing data
-    // if (receivedDrawingData.length == 0) {
-    //   clearCanvas();
-    //   setAllDrawingData([]);
-    // }
+
     if (receivedDrawingData) {
       setAllDrawingData([]);
       setAllDrawingData((prevData) => [...prevData, ...receivedDrawingData]);
     }
   }, [receivedDrawingData]);
 
-  // useEffect(() => {
-  //   if (clearCanvasEvent == true) {
-  //     clearCanvas;
-  //   }
-  // }, [clearCanvasEvent]);
-
   useEffect(() => {
-    // Only render received drawing data if the client is not currently drawing
     if (isDrawing) return;
 
     const canvas = canvasRef.current;
@@ -77,11 +55,9 @@ const CanvasComponent = ({
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
-    // Clear canvas and redraw all actions
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     ctx.fillStyle = "white";
     ctx.fillRect(0, 0, canvas.width, canvas.height);
-    // Render all drawing data
     if (selectedPlayer && selectedPlayer.clientId != clientId) {
       allDrawingData.forEach(({ startX, startY, endX, endY, color }) => {
         ctx.beginPath();
@@ -92,17 +68,17 @@ const CanvasComponent = ({
         ctx.stroke();
       });
     }
-  }, [allDrawingData, isDrawing]); // Re-run whenever drawing data or isDrawing state changes
+  }, [allDrawingData, isDrawing]);
 
   useEffect(() => {
-    clearCanvas(); // Clear the canvas whenever the selected player changes
+    clearCanvas(); 
   }, [selectedPlayer]);
 
   const sendDrawing = (endX: number, endY: number) => {
     socket?.send(
       JSON.stringify({
         gameId: gameId,
-        clientId: clientId,
+        clientId:clientId,
         event: "draw",
         startX: startX,
         startY: startY,
@@ -174,7 +150,7 @@ const CanvasComponent = ({
   };
 
   return (
-    <div className="flex flex-col justify-center items-center gap-4 w-3/5 h-full bg-white overflow-hidden relative">
+    <div className="flex flex-col justify-center items-center gap-4 full h-full bg-white overflow-hidden relative">
       <canvas
         ref={canvasRef}
         style={{
@@ -219,9 +195,14 @@ const CanvasComponent = ({
           </div>
         )}
       </div>
-
+      {/* <div className="absolute top-1 flex justify-center items-center z-50 select-none ">
+        <UnderlinedWord length={wordLength} selectedWord={selectedWord} />
+      </div>
+      <div className="absolute -top-5 flex justify-center items-center right-10 z-50 select-none">
+        <Timer turnCount={turnCount} gameStarted={gameStarted} />
+      </div> */} 
     </div>
   );
 };
 
-export default CanvasComponent;
+export default Canvas;

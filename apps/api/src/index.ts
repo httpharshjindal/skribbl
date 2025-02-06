@@ -126,6 +126,7 @@ wss.on("connection", function connection(socket) {
           if (!games[gameId]) {
             console.error("Game not found:", gameId);
             return;
+
           }
           games[gameId].clients[clientId] = {
             nickName: nickName,
@@ -144,7 +145,6 @@ wss.on("connection", function connection(socket) {
               })
             );
           }
-
           broadcast();
         }
 

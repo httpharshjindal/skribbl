@@ -2,7 +2,7 @@ let socket: WebSocket | null = null;
 
 export default function createWebSocket() {
   if (!socket || socket.readyState === WebSocket.CLOSED || socket.readyState === WebSocket.CLOSING) {
-    const wsUrl = process.env.WS_URL || "ws://localhost:3000";
+    const wsUrl = process.env.NEXT_PUBLIC_WS_URL || "ws://localhost:8080";
     if (!wsUrl) {
       throw new Error("WebSocket URL (WS_URL) is not defined.");
     }
@@ -19,7 +19,7 @@ export default function createWebSocket() {
     };
 
     socket.onerror = (error: any) => {
-      console.error("WebSocket error:", error);
+      console.log("WebSocket error:", error);
     };
 
     socket.onmessage = (message: MessageEvent) => {

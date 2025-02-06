@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-
+"use client"
+import React from "react";
 interface UnderlinedWordProps {
   length: number;
   selectedWord?: string; // Prop for the length of the word
@@ -9,8 +9,7 @@ const UnderlinedWord: React.FC<UnderlinedWordProps> = ({
   length,
   selectedWord,
 }) => {
-  // Create an array of underscores based on the length
-  const underlines: string[] = Array(length).fill("_"); // Ensure TypeScript knows this is an array of strings
+  const underlines: string[] = Array(length).fill("_");
   let alphabets: any;
   if (selectedWord) {
     alphabets = selectedWord.split('').filter(char => /[a-zA-Z]/.test(char));
