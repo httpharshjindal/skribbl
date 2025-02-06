@@ -99,7 +99,6 @@ const HomePage = () => {
 
       socket.onmessage = async (event: any) => {
         const data = JSON.parse(event.data);
-        setMessage(data);
 
         // Handle game creation response
         if (data.event === "create" || data.gameId) {
