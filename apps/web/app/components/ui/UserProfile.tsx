@@ -8,7 +8,7 @@ interface UserProfileProps {
 }
 
 const UserProfile: React.FC<UserProfileProps> = ({
-  className = "",
+  className,
   onClickFun,
   color,
 }) => {

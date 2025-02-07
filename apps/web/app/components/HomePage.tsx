@@ -24,7 +24,7 @@ const HomePage = () => {
   
     if (storedClientId) {
       setScreenLoader(false);
-
+      localStorage.removeItem("clientId");
     }
   
     // Otherwise, create the WebSocket connection.
@@ -139,7 +139,6 @@ const HomePage = () => {
 
   return (
     <div className="w-full h-screen flex justify-center items-center bg-blue-950">
-      {/* Main Box */}
       {screenLoader ? (
         <div className="flex flex-col justify-center items-center">
           <Loader />
@@ -149,14 +148,14 @@ const HomePage = () => {
         </div>
       ) : (
         <div className="w-80 bg-[#3760d121] rounded-md p-5 flex flex-col gap-2 relative z-30">
-          {/* Loader Overlay */}
+
           {loading && (
             <div className="absolute inset-0 flex justify-center items-center bg-[#26365fa6] bg-opacity-70 rounded-md z-40">
               <Loader />
             </div>
           )}
 
-          {/* Error Message */}
+
           <div className="relative h-2">
             {popUp && (
               <h1 className="text-white text-center w-full absolute -top-3 font-semibold  z-50">

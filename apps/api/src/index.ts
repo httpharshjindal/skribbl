@@ -266,6 +266,7 @@ wss.on("connection", function connection(socket) {
         JSON.stringify({
           error: "Invalid JSON format",
           original: data.toString(),
+          e:e,
         })
       );
     }
